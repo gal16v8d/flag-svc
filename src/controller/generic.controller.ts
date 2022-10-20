@@ -1,0 +1,65 @@
+import {
+  Body,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { GenericService } from '../service/generic.service';
+
+/**
+ * Include the basic CRUD operations for any controller.
+ *
+ * @param S schema related data object
+ * @param R request data
+ */
+export class GenericController<S, R> {
+  constructor(private readonly service: GenericService<S, R>) {}
+
+  @Post()
+  async create(@Body() requestData: R) {
+    await this.service.create(requestData);
+  }
+
+  @Get()
+  async findAll(): Promise<S[]> {
+    return this.service.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<S> {
+    const data = await this.service.findOne(id);
+    this.checkExistence(data);
+    return data;
+  }
+
+  @Get()
+  async findByName(@Query('name') name: string): Promise<S> {
+    const data = await this.service.findByName(name);
+    this.checkExistence(data);
+    return data;
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() requestData: R): Promise<S> {
+    const data = await this.service.update(id, requestData);
+    this.checkExistence(data);
+    return data;
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    const data = await this.service.delete(id);
+    this.checkExistence(data);
+    return data;
+  }
+
+  private checkExistence(data: S) {
+    if (!data) {
+      throw new NotFoundException();
+    }
+  }
+}
