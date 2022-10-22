@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type FlagDocument = Flag & Document;
 
@@ -7,8 +7,8 @@ export type FlagDocument = Flag & Document;
 export class Flag {
   @Prop({ required: true, unique: true })
   name: string;
-  @Prop({ type: MongooseSchema.Types.ObjectId, required: true })
-  appId: string;
+  @Prop({ type: Types.ObjectId, required: true, ref: 'App' })
+  appId: Types.ObjectId;
   @Prop({ required: true })
   value: boolean;
 }

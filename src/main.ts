@@ -7,7 +7,7 @@ import { join } from 'path';
 import { AppModule } from './module/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const pkg = JSON.parse(
     await promises.readFile(join('.', 'package.json'), 'utf-8'),
   );

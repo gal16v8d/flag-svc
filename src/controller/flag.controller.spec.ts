@@ -45,17 +45,17 @@ describe('Appdb Controller test suite', () => {
   });
 
   it('should return all flags', async () => {
-    const apps = await service.findAll();
+    const apps = await service.findAll(false);
     expect(apps).toEqual(flagArray);
   });
 
   it('should return single flag', async () => {
-    const app = await flagController.findOne(APP_ID);
+    const app = await flagController.findOne(APP_ID, false);
     expect(app).toEqual(mockFlag1);
   });
 
   it('should return flag by name', async () => {
-    const app = await flagController.findByName(APP_ID);
+    const app = await flagController.findByName(APP_ID, false);
     expect(app).toEqual(mockFlag1);
   });
 });

@@ -46,26 +46,20 @@ describe('FlagService test suite', () => {
   });
 
   it('should return all flags', async () => {
-    jest.spyOn(model, 'find').mockReturnValue({
-      exec: jest.fn().mockResolvedValueOnce(flagArray),
-    } as any);
-    const flags = await service.findAll();
+    jest.spyOn(model, 'find').mockResolvedValue(flagArray);
+    const flags = await service.findAll(false);
     expect(flags).toEqual(flagArray);
   });
 
   it('should return single flag', async () => {
-    jest.spyOn(model, 'findOne').mockReturnValue({
-      exec: jest.fn().mockResolvedValueOnce(mockFlag1),
-    } as any);
-    const flag = await service.findOne(FLAG_ID);
+    jest.spyOn(model, 'findOne').mockResolvedValue(mockFlag1);
+    const flag = await service.findOne(FLAG_ID, false);
     expect(flag).toEqual(mockFlag1);
   });
 
   it('should return flag by name', async () => {
-    jest.spyOn(model, 'findOne').mockReturnValue({
-      exec: jest.fn().mockResolvedValueOnce(mockFlag1),
-    } as any);
-    const flag = await service.findByName(FLAG_ID);
+    jest.spyOn(model, 'findOne').mockResolvedValue(mockFlag1);
+    const flag = await service.findByName(FLAG_ID, false);
     expect(flag).toEqual(mockFlag1);
   });
 

@@ -51,26 +51,20 @@ describe('AppDbService test suite', () => {
   });
 
   it('should return all apps', async () => {
-    jest.spyOn(model, 'find').mockReturnValue({
-      exec: jest.fn().mockResolvedValueOnce(appArray),
-    } as any);
-    const apps = await service.findAll();
+    jest.spyOn(model, 'find').mockResolvedValue(appArray);
+    const apps = await service.findAll(false);
     expect(apps).toEqual(appArray);
   });
 
   it('should return single app', async () => {
-    jest.spyOn(model, 'findOne').mockReturnValue({
-      exec: jest.fn().mockResolvedValueOnce(mockApp1),
-    } as any);
-    const app = await service.findOne(APP_ID);
+    jest.spyOn(model, 'findOne').mockResolvedValue(mockApp1);
+    const app = await service.findOne(APP_ID, false);
     expect(app).toEqual(mockApp1);
   });
 
   it('should return app by name', async () => {
-    jest.spyOn(model, 'findOne').mockReturnValue({
-      exec: jest.fn().mockResolvedValueOnce(mockApp1),
-    } as any);
-    const app = await service.findByName(APP_ID);
+    jest.spyOn(model, 'findOne').mockResolvedValue(mockApp1);
+    const app = await service.findByName(APP_ID, false);
     expect(app).toEqual(mockApp1);
   });
 

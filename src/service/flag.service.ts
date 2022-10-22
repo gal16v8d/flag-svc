@@ -10,6 +10,6 @@ export class FlagService extends GenericService<Flag, FlagDto> {
   constructor(
     @InjectModel(Flag.name) private readonly flagModel: Model<FlagDocument>,
   ) {
-    super(flagModel);
+    super(flagModel, [{ path: 'appId', select: 'name' }]);
   }
 }

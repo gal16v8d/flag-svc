@@ -1,9 +1,13 @@
 import {
   Body,
+  DefaultValuePipe,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
+  ParseBoolPipe,
   Post,
   Put,
   Query,
@@ -25,20 +29,43 @@ export class GenericController<S, R> {
   }
 
   @Get()
-  async findAll(): Promise<S[]> {
-    return this.service.findAll();
+  async findAll(
+    @Query(
+      'expanded',
+      new DefaultValuePipe(false),
+      new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    expanded: boolean,
+  ): Promise<S[]> {
+    return this.service.findAll(expanded);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<S> {
-    const data = await this.service.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @Query(
+      'expanded',
+      new DefaultValuePipe(false),
+      new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    expanded: boolean,
+  ): Promise<S> {
+    const data = await this.service.findOne(id, expanded);
     this.checkExistence(data);
     return data;
   }
 
   @Get()
-  async findByName(@Query('name') name: string): Promise<S> {
-    const data = await this.service.findByName(name);
+  async findByName(
+    @Query('name') name: string,
+    @Query(
+      'expanded',
+      new DefaultValuePipe(false),
+      new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    expanded: boolean,
+  ): Promise<S> {
+    const data = await this.service.findByName(name, expanded);
     this.checkExistence(data);
     return data;
   }
@@ -51,6 +78,7 @@ export class GenericController<S, R> {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
     const data = await this.service.delete(id);
     this.checkExistence(data);
