@@ -2,9 +2,12 @@
   "name": "flag-svc",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "gal16v8d",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=16.17.0 < 17.0.0"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
