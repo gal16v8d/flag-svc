@@ -8,7 +8,7 @@ import { GenericController } from './generic.controller';
 @ApiTags('Flag Controller')
 @Controller('api/flags')
 export class FlagController extends GenericController<Flag, FlagDto> {
-  constructor(private readonly flagService: FlagService) {
+  constructor(readonly flagService: FlagService) {
     super(flagService);
   }
 }

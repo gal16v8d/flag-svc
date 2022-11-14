@@ -8,7 +8,7 @@ import { GenericController } from './generic.controller';
 @ApiTags('Apps Controller')
 @Controller('api/apps')
 export class AppDbController extends GenericController<App, AppDto> {
-  constructor(private readonly appService: AppDbService) {
+  constructor(readonly appService: AppDbService) {
     super(appService);
   }
 }
