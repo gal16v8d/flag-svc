@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FlagController } from '../controller/flag.controller';
 import { FlagService } from '../service/flag.service';
-import { flagArray, mockFlag1 } from '../__mocks__/flag.mock';
+import { flagArray, mockFlag1, mockFlagExtended } from '../__mocks__/flag.mock';
 
 const APP_ID = '1';
 
@@ -20,6 +20,7 @@ describe('Appdb Controller test suite', () => {
             findAll: jest.fn().mockResolvedValue(flagArray),
             findOne: jest.fn().mockResolvedValue(mockFlag1),
             findByName: jest.fn().mockResolvedValue(mockFlag1),
+            findByNameAndAppId: jest.fn().mockResolvedValue(mockFlag1),
             update: jest.fn().mockResolvedValue(mockFlag1),
             delete: jest.fn().mockResolvedValue(mockFlag1),
           },
@@ -34,7 +35,7 @@ describe('Appdb Controller test suite', () => {
   it('should create a new flag', async () => {
     const createSpy = jest
       .spyOn(service, 'create')
-      .mockResolvedValueOnce(mockFlag1);
+      .mockResolvedValueOnce(mockFlagExtended);
     const payload = {
       name: mockFlag1.name,
       appId: mockFlag1.appId,
@@ -56,6 +57,11 @@ describe('Appdb Controller test suite', () => {
 
   it('should return flag by name', async () => {
     const app = await flagController.findByName(APP_ID, false);
+    expect(app).toEqual(mockFlag1);
+  });
+
+  it('should return flag by name and id', async () => {
+    const app = await flagController.findByNameAndAppId(APP_ID, '1', false);
     expect(app).toEqual(mockFlag1);
   });
 });

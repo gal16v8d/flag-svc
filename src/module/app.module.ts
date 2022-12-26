@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import config from 'src/config/config';
+import config from '../config/config';
 import { AppDbModule } from './appdb.module';
 import { FlagModule } from './flag.module';
 import { HealthModule } from './health.module';

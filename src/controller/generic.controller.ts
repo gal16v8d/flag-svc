@@ -85,7 +85,7 @@ export class GenericController<S, R> {
     return data;
   }
 
-  private checkExistence(data: S) {
+  checkExistence(data: S) {
     if (!data) {
       throw new NotFoundException();
     }
