@@ -7,6 +7,7 @@ const int = (val: string | undefined, num: number): number =>
 const config: ConfigFactory<Configuration> = () => ({
   meta: {
     appName: process.env.APP_NAME ?? 'Flag Service',
+    appSecKey: process.env.FLAG_API_KEY ?? '',
   },
   server: {
     dbUrl: process.env.DB_FEATURE,

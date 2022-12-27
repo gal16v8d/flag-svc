@@ -1,15 +1,32 @@
-import { INestApplication } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  INestApplication,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Observable } from 'rxjs';
 import * as request from 'supertest';
+import { HeaderGuard } from '../src/guard/auth.guard';
 import { AppModule } from '../src/module/app.module';
 
 describe('FlagController (e2e)', () => {
   let app: INestApplication;
 
+  class MockHeaderGuard implements CanActivate {
+    canActivate(
+      context: ExecutionContext,
+    ): boolean | Promise<boolean> | Observable<boolean> {
+      return !!context ?? true;
+    }
+  }
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideGuard(HeaderGuard)
+      .useClass(MockHeaderGuard)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();

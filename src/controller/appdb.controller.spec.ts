@@ -1,4 +1,6 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import config from '../config/config';
 import { AppDbController } from '../controller/appdb.controller';
 import { AppDbService } from '../service/appdb.service';
 import { appArray, mockApp1 } from '../__mocks__/appdb.mock';
@@ -11,6 +13,7 @@ describe('Appdb Controller test suite', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule.forRoot({ load: [config] })],
       controllers: [AppDbController],
       providers: [
         {
