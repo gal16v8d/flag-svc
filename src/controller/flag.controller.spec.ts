@@ -1,13 +1,13 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import config from '../config/config';
-import { FlagController } from '../controller/flag.controller';
+import { FlagController } from './flag.controller';
 import { FlagService } from '../service/flag.service';
 import { flagArray, mockFlag1, mockFlagExtended } from '../__mocks__/flag.mock';
 
 const APP_ID = '1';
 
-describe('Appdb Controller test suite', () => {
+describe('Flag Controller test suite', () => {
   let flagController: FlagController;
   let service: FlagService;
 
@@ -60,11 +60,6 @@ describe('Appdb Controller test suite', () => {
 
   it('should return flag by name', async () => {
     const app = await flagController.findByName(APP_ID, false);
-    expect(app).toEqual(mockFlag1);
-  });
-
-  it('should return flag by name and id', async () => {
-    const app = await flagController.findByNameAndAppId(APP_ID, '1', false);
     expect(app).toEqual(mockFlag1);
   });
 });

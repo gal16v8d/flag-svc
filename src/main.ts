@@ -18,7 +18,7 @@ async function bootstrap() {
     .setVersion(pkg.version)
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('swagger-ui', app, document);
+  SwaggerModule.setup('swagger-ui.html', app, document);
   const configService = app.get(ConfigService);
   await app.listen(configService.get('server.port'));
 }
