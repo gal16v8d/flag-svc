@@ -11,7 +11,9 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { HeaderGuard } from '../guard/auth.guard';
 import { GenericService } from '../service/generic.service';
 
 /**
@@ -20,7 +22,8 @@ import { GenericService } from '../service/generic.service';
  * @param S schema related data object
  * @param R request data
  */
-export class GenericController<S, R> {
+@UseGuards(HeaderGuard)
+export abstract class GenericController<S, R> {
   constructor(private readonly service: GenericService<S, R>) {}
 
   @Post()
