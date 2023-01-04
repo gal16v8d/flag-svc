@@ -2,7 +2,7 @@ import { ConfigFactory } from '@nestjs/config';
 import { Configuration } from './config.interface';
 
 const int = (val: string | undefined, num: number): number =>
-  val ? (isNaN(parseInt(val)) ? num : parseInt(val)) : num;
+  isNaN(parseInt(val)) ? num : parseInt(val);
 
 const config: ConfigFactory<Configuration> = () => ({
   meta: {
