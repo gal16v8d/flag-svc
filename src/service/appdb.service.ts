@@ -7,9 +7,7 @@ import { GenericService } from './generic.service';
 
 @Injectable()
 export class AppDbService extends GenericService<App, AppDto> {
-  constructor(
-    @InjectModel(App.name) private readonly appModel: Model<AppDocument>,
-  ) {
+  constructor(@InjectModel(App.name) readonly appModel: Model<AppDocument>) {
     super(appModel);
   }
 }

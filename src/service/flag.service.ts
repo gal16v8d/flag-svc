@@ -7,9 +7,7 @@ import { GenericService } from './generic.service';
 
 @Injectable()
 export class FlagService extends GenericService<Flag, FlagDto> {
-  constructor(
-    @InjectModel(Flag.name) private readonly flagModel: Model<FlagDocument>,
-  ) {
+  constructor(@InjectModel(Flag.name) readonly flagModel: Model<FlagDocument>) {
     super(flagModel, [{ path: 'appId', select: 'name' }]);
   }
 
