@@ -32,14 +32,18 @@ export abstract class GenericController<S, R> {
   }
 
   @Get()
-  async findAll(
+  async find(
     @Query(
       'expanded',
       new DefaultValuePipe(false),
       new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
     )
     expanded: boolean,
-  ): Promise<S[]> {
+    @Query('name') name?: string,
+  ): Promise<S | S[]> {
+    if (name) {
+      return this.findByName(name, expanded);
+    }
     return this.service.findAll(expanded);
   }
 
@@ -58,21 +62,6 @@ export abstract class GenericController<S, R> {
     return data;
   }
 
-  @Get()
-  async findByName(
-    @Query('name') name: string,
-    @Query(
-      'expanded',
-      new DefaultValuePipe(false),
-      new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    expanded: boolean,
-  ): Promise<S> {
-    const data = await this.service.findByName(name, expanded);
-    this.checkExistence(data);
-    return data;
-  }
-
   @Put(':id')
   async update(@Param('id') id: string, @Body() requestData: R): Promise<S> {
     const data = await this.service.update(id, requestData);
@@ -84,6 +73,12 @@ export abstract class GenericController<S, R> {
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
     const data = await this.service.delete(id);
+    this.checkExistence(data);
+    return data;
+  }
+
+  private async findByName(name: string, expanded: boolean): Promise<S> {
+    const data = await this.service.findByName(name, expanded);
     this.checkExistence(data);
     return data;
   }

@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import config from '../config/config';
 import { FlagController } from './flag.controller';
 import { FlagService } from '../service/flag.service';
-import { flagArray, mockFlag1, mockFlagExtended } from '../__mocks__/flag.mock';
+import { flagArray, mockFlag1 } from '../__mocks__/flag.mock';
 
 const APP_ID = '1';
 
@@ -21,8 +21,8 @@ describe('Flag Controller test suite', () => {
           useValue: {
             create: jest.fn().mockResolvedValue(mockFlag1),
             findAll: jest.fn().mockResolvedValue(flagArray),
-            findOne: jest.fn().mockResolvedValue(mockFlag1),
             findByName: jest.fn().mockResolvedValue(mockFlag1),
+            findOne: jest.fn().mockResolvedValue(mockFlag1),
             findByNameAndAppId: jest.fn().mockResolvedValue(mockFlag1),
             update: jest.fn().mockResolvedValue(mockFlag1),
             delete: jest.fn().mockResolvedValue(mockFlag1),
@@ -36,21 +36,23 @@ describe('Flag Controller test suite', () => {
   });
 
   it('should create a new flag', async () => {
-    const createSpy = jest
-      .spyOn(service, 'create')
-      .mockResolvedValueOnce(mockFlagExtended);
     const payload = {
       name: mockFlag1.name,
       appId: mockFlag1.appId,
       value: mockFlag1.value,
     };
     await flagController.create(payload);
-    expect(createSpy).toHaveBeenCalledWith(payload);
+    expect(service.create).toHaveBeenCalledWith(payload);
   });
 
   it('should return all flags', async () => {
-    const apps = await service.findAll(false);
+    const apps = await flagController.find(false);
     expect(apps).toEqual(flagArray);
+  });
+
+  it('should return flag by name', async () => {
+    const app = await flagController.find(false, APP_ID);
+    expect(app).toEqual(mockFlag1);
   });
 
   it('should return single flag', async () => {
@@ -58,8 +60,15 @@ describe('Flag Controller test suite', () => {
     expect(app).toEqual(mockFlag1);
   });
 
-  it('should return flag by name', async () => {
-    const app = await flagController.findByName(APP_ID, false);
+  it('should call update service', async () => {
+    const app = await flagController.update(APP_ID, mockFlag1);
     expect(app).toEqual(mockFlag1);
+    expect(service.update).toHaveBeenCalledWith(APP_ID, mockFlag1);
+  });
+
+  it('should call delete service', async () => {
+    const app = await flagController.delete(APP_ID);
+    expect(app).toEqual(mockFlag1);
+    expect(service.delete).toHaveBeenCalledWith(APP_ID);
   });
 });

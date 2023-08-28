@@ -21,8 +21,8 @@ describe('Appdb Controller test suite', () => {
           useValue: {
             create: jest.fn().mockResolvedValue(mockApp1),
             findAll: jest.fn().mockResolvedValue(appArray),
-            findOne: jest.fn().mockResolvedValue(mockApp1),
             findByName: jest.fn().mockResolvedValue(mockApp1),
+            findOne: jest.fn().mockResolvedValue(mockApp1),
             update: jest.fn().mockResolvedValue(mockApp1),
             delete: jest.fn().mockResolvedValue(mockApp1),
           },
@@ -35,19 +35,21 @@ describe('Appdb Controller test suite', () => {
   });
 
   it('should create a new app', async () => {
-    const createSpy = jest
-      .spyOn(service, 'create')
-      .mockResolvedValueOnce(mockApp1);
     const payload = {
       name: mockApp1.name,
     };
     await appDbController.create(payload);
-    expect(createSpy).toHaveBeenCalledWith(payload);
+    expect(service.create).toHaveBeenCalledWith(payload);
   });
 
   it('should return all apps', async () => {
-    const apps = await service.findAll(false);
+    const apps = await appDbController.find(false);
     expect(apps).toEqual(appArray);
+  });
+
+  it('should return app by name', async () => {
+    const app = await appDbController.find(false, APP_ID);
+    expect(app).toEqual(mockApp1);
   });
 
   it('should return single app', async () => {
@@ -55,8 +57,15 @@ describe('Appdb Controller test suite', () => {
     expect(app).toEqual(mockApp1);
   });
 
-  it('should return app by name', async () => {
-    const app = await appDbController.findByName(APP_ID, false);
+  it('should call update service', async () => {
+    const app = await appDbController.update(APP_ID, mockApp1);
     expect(app).toEqual(mockApp1);
+    expect(service.update).toHaveBeenCalledWith(APP_ID, mockApp1);
+  });
+
+  it('should call delete service', async () => {
+    const app = await appDbController.delete(APP_ID);
+    expect(app).toEqual(mockApp1);
+    expect(service.delete).toHaveBeenCalledWith(APP_ID);
   });
 });

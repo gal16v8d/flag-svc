@@ -1,4 +1,4 @@
-import { Document, Model, PopulateOptions } from 'mongoose';
+import { HydratedDocument, Model, PopulateOptions } from 'mongoose';
 /**
  * Include the basic CRUD operations for any service who touch DB.
  *
@@ -8,7 +8,7 @@ import { Document, Model, PopulateOptions } from 'mongoose';
 export class GenericService<S, R> {
   constructor(
     private readonly model: Model<
-      S & Document<any, any, any>,
+      S & HydratedDocument<any, any, any>,
       Record<string, unknown>,
       Record<string, unknown>,
       Record<string, unknown>,
