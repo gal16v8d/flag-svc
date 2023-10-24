@@ -5,6 +5,7 @@ import { promises } from 'fs';
 import helmet from 'helmet';
 import { join } from 'path';
 import { AppModule } from './module/app.module';
+import { ClusterService } from './service/cluster.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -22,4 +23,4 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   await app.listen(configService.get('server.port'));
 }
-bootstrap();
+ClusterService.clusterize(bootstrap);
