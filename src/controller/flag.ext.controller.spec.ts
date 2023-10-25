@@ -1,14 +1,17 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import config from '../config/config';
-import { FlagService } from '../service/flag.service';
 import { mockFlag1 } from '../__mocks__/flag.mock';
+import config from '../config/config';
+import { CacheService } from '../service/cache.service';
+import { FlagService } from '../service/flag.service';
 import { FlagExtController } from './flag.ext.controller';
 
 const APP_ID = '1';
 
 describe('FlagExt Controller test suite', () => {
   let controller: FlagExtController;
+  let service: FlagService;
+  let cache: CacheService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -19,16 +22,38 @@ describe('FlagExt Controller test suite', () => {
           provide: FlagService,
           useValue: {
             findByNameAndAppId: jest.fn().mockResolvedValue(mockFlag1),
+            getKey: jest.fn().mockResolvedValue('Flag'),
+          },
+        },
+        {
+          provide: CacheService,
+          useValue: {
+            set: jest.fn(),
+            get: jest.fn().mockResolvedValue(undefined),
           },
         },
       ],
     }).compile();
 
     controller = app.get<FlagExtController>(FlagExtController);
+    service = app.get<FlagService>(FlagService);
+    cache = app.get<CacheService>(CacheService);
   });
 
-  it('should return flag by name and id', async () => {
+  it('should return flag by name and id (not cached)', async () => {
     const app = await controller.findByNameAndAppId(APP_ID, '1', false);
     expect(app).toEqual(mockFlag1);
+    expect(cache.get).toHaveBeenCalled();
+    expect(service.findByNameAndAppId).toHaveBeenCalled();
+    expect(cache.set).toHaveBeenCalled();
+  });
+
+  it('should return flag by name and id (cached)', async () => {
+    const mockCacheGet = jest.spyOn(cache, 'get').mockResolvedValue(mockFlag1);
+    const app = await controller.findByNameAndAppId(APP_ID, '1', false);
+    expect(app).toEqual(mockFlag1);
+    expect(mockCacheGet).toHaveBeenCalled();
+    expect(service.findByNameAndAppId).not.toHaveBeenCalled();
+    expect(cache.set).not.toHaveBeenCalled();
   });
 });

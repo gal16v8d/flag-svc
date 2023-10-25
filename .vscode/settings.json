@@ -17,5 +17,8 @@
   },
   "editor.formatOnSave": true,
   "prettier.singleQuote": true,
-  "eslint.lintTask.enable": true
+  "eslint.lintTask.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
 }

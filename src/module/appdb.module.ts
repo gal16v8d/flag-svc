@@ -5,6 +5,7 @@ import config from '../config/config';
 import { AppDbController } from '../controller/appdb.controller';
 import { App, AppSchema } from '../model/schema/app.schema';
 import { AppDbService } from '../service/appdb.service';
+import { CacheService } from '../service/cache.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { AppDbService } from '../service/appdb.service';
     MongooseModule.forFeature([{ name: App.name, schema: AppSchema }]),
   ],
   controllers: [AppDbController],
-  providers: [AppDbService],
+  providers: [AppDbService, CacheService],
 })
 export class AppDbModule {}

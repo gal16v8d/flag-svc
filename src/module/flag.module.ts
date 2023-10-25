@@ -5,6 +5,7 @@ import config from '../config/config';
 import { FlagController } from '../controller/flag.controller';
 import { FlagExtController } from '../controller/flag.ext.controller';
 import { Flag, FlagSchema } from '../model/schema/flag.schema';
+import { CacheService } from '../service/cache.service';
 import { FlagService } from '../service/flag.service';
 
 @Module({
@@ -13,6 +14,6 @@ import { FlagService } from '../service/flag.service';
     MongooseModule.forFeature([{ name: Flag.name, schema: FlagSchema }]),
   ],
   controllers: [FlagController, FlagExtController],
-  providers: [FlagService],
+  providers: [FlagService, CacheService],
 })
 export class FlagModule {}

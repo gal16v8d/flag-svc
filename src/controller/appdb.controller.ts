@@ -3,12 +3,16 @@ import { ApiTags } from '@nestjs/swagger';
 import { AppDto } from '../model/dto/app.dto';
 import { App } from '../model/schema/app.schema';
 import { AppDbService } from '../service/appdb.service';
+import { CacheService } from '../service/cache.service';
 import { GenericController } from './generic.controller';
 
 @ApiTags('Apps Controller')
 @Controller('api/apps')
 export class AppDbController extends GenericController<App, AppDto> {
-  constructor(readonly appService: AppDbService) {
-    super(appService);
+  constructor(
+    readonly appService: AppDbService,
+    readonly cacheService: CacheService,
+  ) {
+    super(appService, cacheService);
   }
 }

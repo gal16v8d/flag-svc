@@ -3,18 +3,25 @@ import {
   DefaultValuePipe,
   Get,
   HttpStatus,
+  Logger,
   NotFoundException,
   ParseBoolPipe,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Flag } from '../model/schema/flag.schema';
+import { CacheService } from '../service/cache.service';
 import { FlagService } from '../service/flag.service';
 
 @ApiTags('Flag Controller')
 @Controller('api/flags')
 export class FlagExtController {
-  constructor(readonly flagService: FlagService) {}
+  private readonly logger = new Logger(FlagExtController.name);
+
+  constructor(
+    readonly flagService: FlagService,
+    readonly cacheService: CacheService,
+  ) {}
 
   @Get()
   async findByNameAndAppId(
@@ -27,12 +34,20 @@ export class FlagExtController {
     )
     expanded: boolean,
   ): Promise<Flag> {
+    const key = `${this.flagService.getKey()}-${name}-${appId}-${expanded}`;
+    const cacheData = await this.cacheService.get(key);
+    if (cacheData) {
+      this.logger.debug('findByNameAndAppId from cache', { key, cacheData });
+      return cacheData as unknown as Flag;
+    }
+    this.logger.debug('findByNameAndAppId not found in cache', key);
     const data = await this.flagService.findByNameAndAppId(
       name,
       appId,
       expanded,
     );
     this.checkExistence(data);
+    this.cacheService.set(key, data);
     return data;
   }
 
