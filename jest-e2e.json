@@ -1,0 +1,15 @@
+{
+  "preset": "ts-jest",
+  "moduleNameMapper": {
+    "^@app/(.*)$": "<rootDir>/src/$1"
+  },
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "testRegex": ".*\\.e2e-spec\\.ts$",
+  "testEnvironment": "node",
+  "globals": {
+    "ts-jest": {
+      "tsconfig": "tsconfig.json"
+    }
+  },
+  "modulePathIgnorePatterns": ["<rootDir>/dist"]
+}

@@ -1,3 +1,5 @@
+import { HeaderGuard } from '@app/guard/auth.guard';
+import { AppModule } from '@app/module/app.module';
 import {
   CanActivate,
   ExecutionContext,
@@ -6,8 +8,6 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { Observable } from 'rxjs';
 import * as request from 'supertest';
-import { HeaderGuard } from '../src/guard/auth.guard';
-import { AppModule } from '../src/module/app.module';
 
 describe('FlagController (e2e)', () => {
   let app: INestApplication;

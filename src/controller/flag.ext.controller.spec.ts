@@ -1,9 +1,9 @@
+import { mockFlag1 } from '@app/__mocks__/flag.mock';
+import config from '@app/config/config';
+import { CacheService } from '@app/service/cache.service';
+import { FlagService } from '@app/service/flag.service';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockFlag1 } from '../__mocks__/flag.mock';
-import config from '../config/config';
-import { CacheService } from '../service/cache.service';
-import { FlagService } from '../service/flag.service';
 import { FlagExtController } from './flag.ext.controller';
 
 const APP_ID = '1';

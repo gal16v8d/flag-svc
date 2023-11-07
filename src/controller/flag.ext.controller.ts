@@ -1,3 +1,6 @@
+import { Flag } from '@app/model/schema/flag.schema';
+import { CacheService } from '@app/service/cache.service';
+import { FlagService } from '@app/service/flag.service';
 import {
   Controller,
   DefaultValuePipe,
@@ -9,9 +12,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Flag } from '../model/schema/flag.schema';
-import { CacheService } from '../service/cache.service';
-import { FlagService } from '../service/flag.service';
 
 @ApiTags('Flag Controller')
 @Controller('api/flags')

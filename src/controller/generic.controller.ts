@@ -1,3 +1,6 @@
+import { HeaderGuard } from '@app/guard/auth.guard';
+import { CacheService } from '@app/service/cache.service';
+import { GenericService } from '@app/service/generic.service';
 import {
   Body,
   DefaultValuePipe,
@@ -14,9 +17,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { HeaderGuard } from '../guard/auth.guard';
-import { CacheService } from '../service/cache.service';
-import { GenericService } from '../service/generic.service';
 
 /**
  * Include the basic CRUD operations for any controller.

@@ -1,10 +1,10 @@
+import config from '@app/config/config';
+import { AppDbController } from '@app/controller/appdb.controller';
+import { AppDbService } from '@app/service/appdb.service';
+import { CacheService } from '@app/service/cache.service';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { appArray, mockApp1 } from '../__mocks__/appdb.mock';
-import config from '../config/config';
-import { AppDbController } from '../controller/appdb.controller';
-import { AppDbService } from '../service/appdb.service';
-import { CacheService } from '../service/cache.service';
 
 const APP_ID = '1';
 

@@ -1,8 +1,8 @@
+import { AppDto } from '@app/model/dto/app.dto';
+import { App, AppDocument } from '@app/model/schema/app.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AppDto } from '../model/dto/app.dto';
-import { App, AppDocument } from '../model/schema/app.schema';
 import { GenericService } from './generic.service';
 
 @Injectable()

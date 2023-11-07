@@ -1,5 +1,5 @@
+import { RequestMiddleware } from '@app/middleware/request.middleware';
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { RequestMiddleware } from '../middleware/request.middleware';
 
 @Global()
 @Module({})

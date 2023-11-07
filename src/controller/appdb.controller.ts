@@ -1,9 +1,9 @@
+import { AppDto } from '@app/model/dto/app.dto';
+import { App } from '@app/model/schema/app.schema';
+import { AppDbService } from '@app/service/appdb.service';
+import { CacheService } from '@app/service/cache.service';
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AppDto } from '../model/dto/app.dto';
-import { App } from '../model/schema/app.schema';
-import { AppDbService } from '../service/appdb.service';
-import { CacheService } from '../service/cache.service';
 import { GenericController } from './generic.controller';
 
 @ApiTags('Apps Controller')

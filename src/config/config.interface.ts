@@ -1,4 +1,7 @@
 export interface Configuration {
+  app: {
+    clusterEnabled: boolean;
+  };
   meta: {
     appName: string;
     appSecKey: string;

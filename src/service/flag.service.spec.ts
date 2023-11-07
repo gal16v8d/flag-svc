@@ -1,8 +1,8 @@
+import { flagArray, mockFlag1 } from '@app/__mocks__/flag.mock';
+import { Flag } from '@app/model/schema/flag.schema';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
-import { flagArray, mockFlag1 } from '../__mocks__/flag.mock';
-import { Flag } from '../model/schema/flag.schema';
 import { FlagService } from './flag.service';
 
 const FLAG_ID = '1';

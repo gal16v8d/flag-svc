@@ -1,8 +1,8 @@
+import { FlagDto } from '@app/model/dto/flag.dto';
+import { Flag, FlagDocument } from '@app/model/schema/flag.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { FlagDto } from '../model/dto/flag.dto';
-import { Flag, FlagDocument } from '../model/schema/flag.schema';
 import { GenericService } from './generic.service';
 
 @Injectable()

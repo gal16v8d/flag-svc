@@ -23,4 +23,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   await app.listen(configService.get('server.port'));
 }
-ClusterService.clusterize(bootstrap);
+
+process.env.CLUSTER_ENABLED == 'true'
+  ? ClusterService.clusterize(bootstrap)
+  : bootstrap();

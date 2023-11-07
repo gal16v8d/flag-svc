@@ -1,8 +1,8 @@
+import { appArray, mockApp1 } from '@app/__mocks__/appdb.mock';
+import { App } from '@app/model/schema/app.schema';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
-import { appArray, mockApp1 } from '../__mocks__/appdb.mock';
-import { App } from '../model/schema/app.schema';
 import { AppDbService } from './appdb.service';
 
 const APP_ID = '1';
