@@ -10,7 +10,6 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "postinstall": "tsconfig-paths install",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
