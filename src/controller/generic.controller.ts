@@ -35,8 +35,9 @@ export abstract class GenericController<S, R> {
 
   @Post()
   async create(@Body() requestData: R) {
-    await this.service.create(requestData);
-    this.cache.deleteAll(this.service.getKey());
+    const data = await this.service.create(requestData);
+    await this.cache.deleteAll(this.service.getKey());
+    return data;
   }
 
   @Get()
@@ -74,7 +75,7 @@ export abstract class GenericController<S, R> {
     this.logger.debug('findOne not found in cache', key);
     const data = await this.service.findOne(id, expanded);
     this.checkExistence(data);
-    this.cache.set(key, data);
+    await this.cache.set(key, data);
     return data;
   }
 
@@ -82,17 +83,15 @@ export abstract class GenericController<S, R> {
   async update(@Param('id') id: string, @Body() requestData: R): Promise<S> {
     const data = await this.service.update(id, requestData);
     this.checkExistence(data);
-    this.cache.deleteAll(this.service.getKey());
+    await this.cache.deleteAll(this.service.getKey());
     return data;
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
-    const data = await this.service.delete(id);
-    this.checkExistence(data);
-    this.cache.deleteAll(this.service.getKey());
-    return data;
+    await this.service.delete(id);
+    await this.cache.deleteAll(this.service.getKey());
   }
 
   private async findAll(expanded: boolean): Promise<S[]> {
@@ -104,7 +103,7 @@ export abstract class GenericController<S, R> {
     }
     this.logger.debug('findAll not found in cache', key);
     const data = await this.service.findAll(expanded);
-    this.cache.set(key, data);
+    await this.cache.set(key, data);
     return data;
   }
 
@@ -118,7 +117,7 @@ export abstract class GenericController<S, R> {
     this.logger.debug('findByName not found in cache', key);
     const data = await this.service.findByName(name, expanded);
     this.checkExistence(data);
-    this.cache.set(key, data);
+    await this.cache.set(key, data);
     return data;
   }
 

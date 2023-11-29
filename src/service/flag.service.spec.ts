@@ -26,7 +26,7 @@ describe('FlagService test suite', () => {
             findByIdAndUpdate: jest.fn().mockReturnValue({
               exec: jest.fn().mockResolvedValueOnce(mockFlag1),
             } as any),
-            findByIdAndRemove: jest.fn().mockReturnValue({
+            findByIdAndDelete: jest.fn().mockReturnValue({
               exec: jest.fn().mockResolvedValueOnce(mockFlag1),
             } as any),
             exec: jest.fn(),
@@ -74,8 +74,7 @@ describe('FlagService test suite', () => {
   });
 
   it('should delete a flag', async () => {
-    const flag = await service.delete(FLAG_ID);
-    expect(flag).toEqual(mockFlag1);
-    expect(model.findByIdAndRemove).toHaveBeenCalled();
+    await service.delete(FLAG_ID);
+    expect(model.findByIdAndDelete).toHaveBeenCalled();
   });
 });

@@ -114,8 +114,7 @@ describe('Appdb Controller test suite', () => {
   });
 
   it('should call delete service', async () => {
-    const app = await appDbController.delete(APP_ID);
-    expect(app).toEqual(mockApp1);
+    await appDbController.delete(APP_ID);
     expect(service.delete).toHaveBeenCalledWith(APP_ID);
     expect(cache.deleteAll).toHaveBeenCalled();
   });

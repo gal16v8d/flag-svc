@@ -117,8 +117,7 @@ describe('Flag Controller test suite', () => {
   });
 
   it('should call delete service', async () => {
-    const app = await flagController.delete(APP_ID);
-    expect(app).toEqual(mockFlag1);
+    await flagController.delete(APP_ID);
     expect(service.delete).toHaveBeenCalledWith(APP_ID);
     expect(cache.deleteAll).toHaveBeenCalled();
   });

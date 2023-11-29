@@ -47,7 +47,7 @@ export class FlagExtController {
       expanded,
     );
     this.checkExistence(data);
-    this.cacheService.set(key, data);
+    await this.cacheService.set(key, data);
     return data;
   }
 

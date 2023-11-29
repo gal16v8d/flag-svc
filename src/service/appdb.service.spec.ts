@@ -26,7 +26,7 @@ describe('AppDbService test suite', () => {
             findByIdAndUpdate: jest.fn().mockReturnValue({
               exec: jest.fn().mockResolvedValueOnce(mockApp1),
             } as any),
-            findByIdAndRemove: jest.fn().mockReturnValue({
+            findByIdAndDelete: jest.fn().mockReturnValue({
               exec: jest.fn().mockResolvedValueOnce(mockApp1),
             } as any),
             exec: jest.fn(),
@@ -76,8 +76,7 @@ describe('AppDbService test suite', () => {
   });
 
   it('should delete an app', async () => {
-    const app = await service.delete(APP_ID);
-    expect(app).toEqual(mockApp1);
-    expect(model.findByIdAndRemove).toHaveBeenCalled();
+    await service.delete(APP_ID);
+    expect(model.findByIdAndDelete).toHaveBeenCalled();
   });
 });
