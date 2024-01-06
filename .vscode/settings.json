@@ -19,6 +19,6 @@
   "prettier.singleQuote": true,
   "eslint.lintTask.enable": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true
+    "source.organizeImports": "explicit"
   }
 }
