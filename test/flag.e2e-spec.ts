@@ -16,7 +16,7 @@ describe('FlagController (e2e)', () => {
     canActivate(
       context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
-      return !!context ?? true;
+      return !!context;
     }
   }
 
