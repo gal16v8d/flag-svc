@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { mockFlag1 } from '@app/__mocks__/flag.mock';
 import config from '@app/config/config';
 import { CacheService } from '@app/service/cache.service';

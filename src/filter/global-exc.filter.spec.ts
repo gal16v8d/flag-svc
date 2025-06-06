@@ -1,4 +1,5 @@
 import { BadRequestException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { Test, TestingModule } from '@nestjs/testing';
 import { GlobalExceptionFilter } from './global-exc.filter';
 
@@ -6,26 +7,33 @@ describe('GlobalExceptionFIlter', () => {
   const mockLogger = { error: jest.fn() };
 
   let excFilter: GlobalExceptionFilter;
-  let mockJson: any;
-  let mockStatus: any;
-  let mockResponse: any;
-  let mockHttpArgs: any;
-  let mockArgHost: any;
+  let mockJson: unknown;
+  let mockStatus: unknown;
+  let mockHttpArgs: HttpArgumentsHost;
+  let mockArgHost: ArgumentsHost;
 
   beforeEach(async () => {
     mockJson = jest.fn();
     mockStatus = jest.fn().mockImplementation(() => ({ json: mockJson }));
-    mockResponse = jest.fn().mockImplementation(() => ({ status: mockStatus }));
-    mockHttpArgs = jest.fn().mockImplementation(() => ({
-      getResponse: mockResponse,
+
+    mockHttpArgs = {
+      getResponse: () => ({
+        status: mockStatus,
+        json: mockJson,
+      }),
       getRequest: () => ({
         url: 'test-url',
         header: (header: string) => header,
       }),
-    }));
+      getNext: () => jest.fn(),
+    } as HttpArgumentsHost;
     mockArgHost = {
-      switchToHttp: mockHttpArgs,
+      switchToHttp: () => mockHttpArgs,
       getArgByIndex: jest.fn(),
+      getArgs: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      getType: jest.fn(),
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -48,7 +56,7 @@ describe('GlobalExceptionFIlter', () => {
       new BadRequestException('Missing required header x-api-key'),
       mockArgHost,
     );
-    expect(mockJson).toBeCalledWith({
+    expect(mockJson).toHaveBeenCalledWith({
       status: HttpStatus.BAD_REQUEST,
       path: 'test-url',
       message: 'Missing required header x-api-key',
@@ -57,7 +65,7 @@ describe('GlobalExceptionFIlter', () => {
 
   it('should log and filter the custom exception', () => {
     excFilter.catch(new TypeError('Custom error'), mockArgHost);
-    expect(mockJson).toBeCalledWith({
+    expect(mockJson).toHaveBeenCalledWith({
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       path: 'test-url',
       message: 'Internal server error',

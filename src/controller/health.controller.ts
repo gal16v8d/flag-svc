@@ -8,7 +8,7 @@ export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
   @Get()
-  getHello(): string {
+  getHello(): Record<string, string> {
     return this.healthService.getHello();
   }
 }

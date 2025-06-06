@@ -1,7 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { HealthModule } from '@app/module/health.module';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { HealthModule } from '../src/module/health.module';
+import { Test, TestingModule } from '@nestjs/testing';
+import request from 'supertest';
+import { App } from 'supertest/types';
 
 describe('HealthController (e2e)', () => {
   let app: INestApplication;
@@ -18,9 +19,9 @@ describe('HealthController (e2e)', () => {
   afterAll(async () => await app.close());
 
   it('/health (GET)', () => {
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as unknown as App)
       .get('/health')
       .expect(200)
-      .expect('Flag-service is UP');
+      .expect({ status: 'UP' });
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { appArray, mockApp1 } from '@app/__mocks__/appdb.mock';
 import { App } from '@app/model/schema/app.schema';
 import { getModelToken } from '@nestjs/mongoose';

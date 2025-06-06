@@ -1,6 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const cluster = require('cluster');
 import { Injectable, Logger } from '@nestjs/common';
+import cluster from 'cluster';
 import * as os from 'os';
 import * as process from 'process';
 
@@ -15,6 +14,7 @@ export class ClusterService {
       for (let i = 0; i < cpus; i++) {
         cluster.fork();
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       cluster.on('exit', (worker, code, signal) => {
         logger.log(`worker ${worker.process.pid} exit!`);
       });

@@ -9,7 +9,9 @@ export class HeaderGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request: { headers?: Record<string, unknown> } = context
+      .switchToHttp()
+      .getRequest();
     return (
       this.cfgService.get<string>('meta.appSecKey') ===
       request?.headers?.['x-api-key']

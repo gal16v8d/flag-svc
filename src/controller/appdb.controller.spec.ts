@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import config from '@app/config/config';
 import { AppDbController } from '@app/controller/appdb.controller';
 import { AppDbService } from '@app/service/appdb.service';

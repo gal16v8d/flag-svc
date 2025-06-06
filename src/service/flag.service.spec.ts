@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { flagArray, mockFlag1 } from '@app/__mocks__/flag.mock';
 import { Flag } from '@app/model/schema/flag.schema';
 import { getModelToken } from '@nestjs/mongoose';

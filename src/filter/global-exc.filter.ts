@@ -1,3 +1,4 @@
+import { ErrorResponseDto } from '@app/model/dto/error-response.dto';
 import {
   ArgumentsHost,
   Catch,
@@ -27,8 +28,9 @@ export class GlobalExceptionFilter implements ExceptionFilter<Error> {
     let message: string;
 
     if (exception instanceof HttpException) {
-      const errResponse = exception.getResponse() as any;
-      message = errResponse.message ?? errResponse.error;
+      const errResponse =
+        exception.getResponse() as unknown as ErrorResponseDto;
+      message = errResponse.message ?? errResponse.error ?? 'Unknown error';
       status = exception.getStatus();
     } else {
       message = 'Internal server error';

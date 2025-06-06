@@ -16,7 +16,7 @@ describe('HealthService test suite', () => {
     expect(service).toBeDefined();
   });
 
-  it('should get hello response', async () => {
-    expect('Flag-service is UP').toEqual(service.getHello());
+  it('should get hello response', () => {
+    expect({ status: 'UP' }).toEqual(service.getHello());
   });
 });

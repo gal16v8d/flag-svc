@@ -56,7 +56,7 @@ describe('CacheService test suite', () => {
 
   it('should getCacheKeys', async () => {
     await service.set(KEY, APP_ID);
-    const data = await service.getCacheKeys();
+    const data = service.getCacheKeys();
     expect(data).toHaveLength(1);
   });
 });

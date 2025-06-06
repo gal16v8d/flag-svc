@@ -15,6 +15,6 @@ describe('Health Controller test suite', () => {
   });
 
   it('should return "UP"', () => {
-    expect(healthController.getHello()).toBe('Flag-service is UP');
+    expect(healthController.getHello()).toStrictEqual({ status: 'UP' });
   });
 });

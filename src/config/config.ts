@@ -6,7 +6,9 @@ const int = (val: string | undefined, num: number): number =>
 
 const config: ConfigFactory<Configuration> = () => ({
   app: {
-    clusterEnabled: Boolean(process.env.CLUSTER_ENABLED) ?? false,
+    clusterEnabled: process.env.CLUSTER_ENABLED
+      ? Boolean(process.env.CLUSTER_ENABLED)
+      : false,
   },
   meta: {
     appName: process.env.APP_NAME ?? 'Flag Service',

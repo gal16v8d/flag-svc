@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Observable } from 'rxjs';
-import * as request from 'supertest';
+import request from 'supertest';
+import { App } from 'supertest/types';
 
 describe('FlagController (e2e)', () => {
   let app: INestApplication;
@@ -37,10 +38,10 @@ describe('FlagController (e2e)', () => {
   });
 
   it('/api/flags (GET)', () => {
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as unknown as App)
       .get('/api/flags?name=TEST_FLAG&appId=634dc6a51a12a7cd6bb96c5f')
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect((body: Record<string, unknown>) => body.hasOwnProperty('value'));
+      .expect((body: Record<string, unknown>) => Object.hasOwn(body, 'value'));
   });
 });

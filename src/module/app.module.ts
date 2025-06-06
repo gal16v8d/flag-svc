@@ -13,7 +13,7 @@ import { RequestModule } from './request.module';
     ConfigModule.forRoot({ load: [config] }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('server.dbUrl'),
       }),
       inject: [ConfigService],

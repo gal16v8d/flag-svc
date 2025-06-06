@@ -38,7 +38,7 @@ export class FlagExtController {
     const cacheData = await this.cacheService.get(key);
     if (cacheData) {
       this.logger.debug('findByNameAndAppId from cache', { key, cacheData });
-      return cacheData as unknown as Flag;
+      return cacheData as Flag;
     }
     this.logger.debug('findByNameAndAppId not found in cache', key);
     const data = await this.flagService.findByNameAndAppId(
