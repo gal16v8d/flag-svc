@@ -49,7 +49,7 @@ export abstract class GenericController<S, R> {
     )
     expanded: boolean,
     @Query('name') name?: string,
-  ): Promise<S | S[]> {
+  ): Promise<Array<S> | S> {
     if (name) {
       return this.findByName(name, expanded);
     }
@@ -66,14 +66,19 @@ export abstract class GenericController<S, R> {
     )
     expanded: boolean,
   ): Promise<S> {
-    const key = `${this.service.getKey()}-${id}-${expanded}`;
+    const key = `${this.service.getKey(expanded)}-${id}`;
     const cacheData = await this.cache.get(key);
     if (cacheData) {
       this.logger.debug('findOne from cache', { key, cacheData });
       return cacheData as S;
     }
     this.logger.debug('findOne not found in cache', key);
-    const data = await this.service.findOne(id, expanded);
+    let data: S;
+    if (expanded) {
+      data = await this.service.findOneExpanded(id);
+    } else {
+      data = await this.service.findOne(id);
+    }
     this.checkExistence(data);
     await this.cache.set(key, data);
     return data;
@@ -94,28 +99,38 @@ export abstract class GenericController<S, R> {
     await this.cache.deleteAll(this.service.getKey());
   }
 
-  private async findAll(expanded: boolean): Promise<S[]> {
-    const key = this.service.getKey();
+  private async findAll(expanded: boolean): Promise<Array<S>> {
+    const key = this.service.getKey(expanded);
     const cacheData = await this.cache.get(key);
     if (cacheData) {
       this.logger.debug('findAll from cache', { key, cacheData });
-      return cacheData as S[];
+      return cacheData as Array<S>;
     }
     this.logger.debug('findAll not found in cache', key);
-    const data = await this.service.findAll(expanded);
+    let data: Array<S>;
+    if (expanded) {
+      data = await this.service.findAllExpanded();
+    } else {
+      data = await this.service.findAll();
+    }
     await this.cache.set(key, data);
     return data;
   }
 
   private async findByName(name: string, expanded: boolean): Promise<S> {
-    const key = `${this.service.getKey()}-${name}-${expanded}`;
+    const key = `${this.service.getKey(expanded)}-${name}`;
     const cacheData = await this.cache.get(key);
     if (cacheData) {
       this.logger.debug('findByName from cache', { key, cacheData });
       return cacheData as S;
     }
     this.logger.debug('findByName not found in cache', key);
-    const data = await this.service.findByName(name, expanded);
+    let data: S;
+    if (expanded) {
+      data = await this.service.findByNameExpanded(name);
+    } else {
+      data = await this.service.findByName(name);
+    }
     this.checkExistence(data);
     await this.cache.set(key, data);
     return data;

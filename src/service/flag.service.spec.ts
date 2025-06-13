@@ -51,19 +51,19 @@ describe('FlagService test suite', () => {
   });
 
   it('should return all flags', async () => {
-    const flags = await service.findAll(false);
+    const flags = await service.findAll();
     expect(flags).toEqual(flagArray);
     expect(model.find).toHaveBeenCalled();
   });
 
   it('should return single flag', async () => {
-    const flag = await service.findOne(FLAG_ID, false);
+    const flag = await service.findOne(FLAG_ID);
     expect(flag).toEqual(mockFlag1);
     expect(model.findOne).toHaveBeenCalled();
   });
 
   it('should return flag by name', async () => {
-    const flag = await service.findByName(FLAG_ID, false);
+    const flag = await service.findByName(FLAG_ID);
     expect(flag).toEqual(mockFlag1);
     expect(model.findOne).toHaveBeenCalled();
   });

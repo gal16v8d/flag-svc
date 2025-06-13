@@ -11,30 +11,40 @@ export class GenericService<S, R> {
     private readonly populateOpts?: PopulateOptions[],
   ) {}
 
-  getKey(): string {
-    return this.model.modelName;
+  getKey(expanded?: boolean): string {
+    return `${this.model.modelName}-${!!expanded}`;
   }
 
   async create(data: R): Promise<S> {
     return this.model.create(data);
   }
 
-  async findAll(expanded: boolean): Promise<S[]> {
-    return this.model
-      .find()
-      .then((data) => this.populateDataArr(data, expanded));
+  async findAll(): Promise<Array<S>> {
+    return this.model.find();
   }
 
-  async findOne(id: string, expanded: boolean): Promise<S> {
+  async findAllExpanded(): Promise<Array<S>> {
+    return this.model.find().then((data) => this.expandDataArr(data));
+  }
+
+  async findOne(id: string): Promise<S> {
+    return this.model.findOne({ _id: id });
+  }
+
+  async findOneExpanded(id: string): Promise<S> {
     return this.model
       .findOne({ _id: id })
-      .then((data) => this.populateData(data, expanded));
+      .then((data) => this.expandData(data));
   }
 
-  async findByName(name: string, expanded: boolean): Promise<S> {
+  async findByName(name: string): Promise<S> {
+    return this.model.findOne({ name: name });
+  }
+
+  async findByNameExpanded(name: string): Promise<S> {
     return this.model
       .findOne({ name: name })
-      .then((data) => this.populateData(data, expanded));
+      .then((data) => this.expandData(data));
   }
 
   async update(id: string, data: R): Promise<S> {
@@ -45,15 +55,15 @@ export class GenericService<S, R> {
     await this.model.findByIdAndDelete({ _id: id }).exec();
   }
 
-  populateData(data: S, expanded: boolean) {
-    return expanded && this.populateOpts
-      ? this.model.populate(data, this.populateOpts ?? [])
+  async expandData(data: S) {
+    return this.populateOpts
+      ? await this.model.populate(data, this.populateOpts ?? [])
       : data;
   }
 
-  private populateDataArr(data: S[], expanded: boolean) {
-    return expanded && this.populateOpts
-      ? this.model.populate(data, this.populateOpts ?? [])
+  async expandDataArr(data: Array<S>) {
+    return this.populateOpts
+      ? await Promise.all(data.map((d) => this.expandData(d)))
       : data;
   }
 }

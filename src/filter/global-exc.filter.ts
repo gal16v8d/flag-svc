@@ -12,7 +12,7 @@ import { Request, Response } from 'express';
 
 @Catch(Error)
 export class GlobalExceptionFilter implements ExceptionFilter<Error> {
-  constructor(private log: Logger) {}
+  constructor(private readonly log: Logger) {}
 
   catch(exception: Error, host: ArgumentsHost): void {
     const ctx: HttpArgumentsHost = host.switchToHttp();

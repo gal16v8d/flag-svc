@@ -53,19 +53,19 @@ describe('AppDbService test suite', () => {
   });
 
   it('should return all apps', async () => {
-    const apps = await service.findAll(false);
+    const apps = await service.findAll();
     expect(apps).toEqual(appArray);
     expect(model.find).toHaveBeenCalled();
   });
 
   it('should return single app', async () => {
-    const app = await service.findOne(APP_ID, false);
+    const app = await service.findOne(APP_ID);
     expect(app).toEqual(mockApp1);
     expect(model.findOne).toHaveBeenCalled();
   });
 
   it('should return app by name', async () => {
-    const app = await service.findByName(APP_ID, false);
+    const app = await service.findByName(APP_ID);
     expect(app).toEqual(mockApp1);
     expect(model.findOne).toHaveBeenCalled();
   });

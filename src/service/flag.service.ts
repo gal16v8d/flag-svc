@@ -16,8 +16,13 @@ export class FlagService extends GenericService<Flag, FlagDto> {
     appId: string,
     expanded: boolean,
   ): Promise<Flag> {
-    return this.flagModel
-      .findOne({ name: name, appId: new Types.ObjectId(appId) })
-      .then((data) => this.populateData(data, expanded));
+    const data = await this.flagModel.findOne({
+      name: name,
+      appId: new Types.ObjectId(appId),
+    });
+    if (expanded) {
+      return this.expandData(data);
+    }
+    return data;
   }
 }
