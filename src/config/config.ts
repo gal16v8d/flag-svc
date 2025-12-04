@@ -1,8 +1,10 @@
 import { ConfigFactory } from '@nestjs/config';
 import { Configuration } from './config.interface';
 
-const int = (val: string | undefined, num: number): number =>
-  isNaN(parseInt(val)) ? num : parseInt(val);
+const safeParseInt = (val: string | undefined, num: number): number => {
+  const parsed = parseInt(val ?? String(num));
+  return isNaN(parsed) ? num : parsed;
+};
 
 const config: ConfigFactory<Configuration> = () => ({
   app: {
@@ -15,8 +17,8 @@ const config: ConfigFactory<Configuration> = () => ({
     appSecKey: process.env.FLAG_API_KEY ?? '',
   },
   server: {
-    dbUrl: process.env.DB_FEATURE,
-    port: int(process.env.PORT, 3001),
+    dbUrl: process.env.DB_FEATURE ?? '',
+    port: safeParseInt(process.env.PORT, 3001),
   },
 });
 

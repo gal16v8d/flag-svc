@@ -1,4 +1,9 @@
-import { Document, Model, PopulateOptions } from 'mongoose';
+import { Document, Model, PopulateOptions, UpdateQuery } from 'mongoose';
+
+function isNotNull<T>(item: T | null): item is NonNullable<T> {
+  return item !== null;
+}
+
 /**
  * Include the basic CRUD operations for any service who touch DB.
  *
@@ -27,43 +32,47 @@ export class GenericService<S, R> {
     return this.model.find().then((data) => this.expandDataArr(data));
   }
 
-  async findOne(id: string): Promise<S> {
+  async findOne(id: string): Promise<S | null> {
     return this.model.findOne({ _id: id });
   }
 
-  async findOneExpanded(id: string): Promise<S> {
+  async findOneExpanded(id: string): Promise<S | null> {
     return this.model
       .findOne({ _id: id })
       .then((data) => this.expandData(data));
   }
 
-  async findByName(name: string): Promise<S> {
+  async findByName(name: string): Promise<S | null> {
     return this.model.findOne({ name: name });
   }
 
-  async findByNameExpanded(name: string): Promise<S> {
+  async findByNameExpanded(name: string): Promise<S | null> {
     return this.model
       .findOne({ name: name })
       .then((data) => this.expandData(data));
   }
 
-  async update(id: string, data: R): Promise<S> {
-    return this.model.findByIdAndUpdate(id, data).exec();
+  async update(id: string, data: UpdateQuery<S & Document>): Promise<S | null> {
+    return this.model.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
   async delete(id: string): Promise<void> {
     await this.model.findByIdAndDelete({ _id: id }).exec();
   }
 
-  async expandData(data: S) {
-    return this.populateOpts
+  async expandData(data: S | null) {
+    return data && this.populateOpts
       ? await this.model.populate(data, this.populateOpts ?? [])
       : data;
   }
 
-  async expandDataArr(data: Array<S>) {
-    return this.populateOpts
-      ? await Promise.all(data.map((d) => this.expandData(d)))
-      : data;
+  async expandDataArr(data: Array<S> | null) {
+    if (!data || !this.populateOpts) {
+      return [];
+    }
+
+    const expansionPromises = data.map((d) => this.expandData(d));
+    const expandedData = await Promise.all(expansionPromises);
+    return expandedData.filter(isNotNull);
   }
 }

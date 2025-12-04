@@ -15,7 +15,7 @@ export class FlagService extends GenericService<Flag, FlagDto> {
     name: string,
     appId: string,
     expanded: boolean,
-  ): Promise<Flag> {
+  ): Promise<Flag | null> {
     const data = await this.flagModel.findOne({
       name: name,
       appId: new Types.ObjectId(appId),

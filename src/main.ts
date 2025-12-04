@@ -23,7 +23,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('swagger-ui.html', app, document);
   const configService = app.get(ConfigService);
-  await app.listen(configService.get('server.port'));
+  await app.listen(configService.get('server.port')!);
 }
 
 if (process.env.CLUSTER_ENABLED == 'true') {

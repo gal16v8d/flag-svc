@@ -33,7 +33,7 @@ export class FlagExtController {
       new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
     )
     expanded: boolean,
-  ): Promise<Flag> {
+  ): Promise<Flag | null> {
     const key = `${this.flagService.getKey()}-${name}-${appId}-${expanded}`;
     const cacheData = await this.cacheService.get(key);
     if (cacheData) {
@@ -51,7 +51,7 @@ export class FlagExtController {
     return data;
   }
 
-  checkExistence(data: Flag) {
+  checkExistence(data: Flag | null): void {
     if (!data) {
       throw new NotFoundException();
     }

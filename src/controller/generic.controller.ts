@@ -49,7 +49,7 @@ export abstract class GenericController<S, R> {
     )
     expanded: boolean,
     @Query('name') name?: string,
-  ): Promise<Array<S> | S> {
+  ): Promise<Array<S> | S | null> {
     if (name) {
       return this.findByName(name, expanded);
     }
@@ -65,7 +65,7 @@ export abstract class GenericController<S, R> {
       new ParseBoolPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
     )
     expanded: boolean,
-  ): Promise<S> {
+  ): Promise<S | null> {
     const key = `${this.service.getKey(expanded)}-${id}`;
     const cacheData = await this.cache.get(key);
     if (cacheData) {
@@ -73,7 +73,7 @@ export abstract class GenericController<S, R> {
       return cacheData as S;
     }
     this.logger.debug('findOne not found in cache', key);
-    let data: S;
+    let data: S | null;
     if (expanded) {
       data = await this.service.findOneExpanded(id);
     } else {
@@ -85,8 +85,12 @@ export abstract class GenericController<S, R> {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() requestData: R): Promise<S> {
-    const data = await this.service.update(id, requestData);
+  async update(
+    @Param('id') id: string,
+    @Body() requestData: R,
+  ): Promise<S | null> {
+    const payload: Partial<S> = requestData as unknown as Partial<S>;
+    const data = await this.service.update(id, payload);
     this.checkExistence(data);
     await this.cache.deleteAll(this.service.getKey());
     return data;
@@ -117,7 +121,7 @@ export abstract class GenericController<S, R> {
     return data;
   }
 
-  private async findByName(name: string, expanded: boolean): Promise<S> {
+  private async findByName(name: string, expanded: boolean): Promise<S | null> {
     const key = `${this.service.getKey(expanded)}-${name}`;
     const cacheData = await this.cache.get(key);
     if (cacheData) {
@@ -125,7 +129,7 @@ export abstract class GenericController<S, R> {
       return cacheData as S;
     }
     this.logger.debug('findByName not found in cache', key);
-    let data: S;
+    let data: S | null;
     if (expanded) {
       data = await this.service.findByNameExpanded(name);
     } else {
@@ -136,7 +140,7 @@ export abstract class GenericController<S, R> {
     return data;
   }
 
-  checkExistence(data: S) {
+  checkExistence(data: S | null): void {
     if (!data) {
       throw new NotFoundException();
     }
