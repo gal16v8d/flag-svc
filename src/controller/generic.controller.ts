@@ -17,6 +17,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { Document, UpdateQuery } from 'mongoose';
 
 /**
  * Include the basic CRUD operations for any controller.
@@ -89,7 +90,7 @@ export abstract class GenericController<S, R> {
     @Param('id') id: string,
     @Body() requestData: R,
   ): Promise<S | null> {
-    const payload: Partial<S> = requestData as unknown as Partial<S>;
+    const payload = requestData as unknown as UpdateQuery<S & Document>;
     const data = await this.service.update(id, payload);
     this.checkExistence(data);
     await this.cache.deleteAll(this.service.getKey());
