@@ -53,7 +53,7 @@ export class GenericService<S, R> {
   }
 
   async update(id: string, data: UpdateQuery<S & Document>): Promise<S | null> {
-    return this.model.findByIdAndUpdate(id, data, { new: true }).exec();
+    return this.model.findByIdAndUpdate(id, data).exec();
   }
 
   async delete(id: string): Promise<void> {
